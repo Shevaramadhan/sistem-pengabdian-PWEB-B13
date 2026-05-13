@@ -1,0 +1,64 @@
+<!-- HALAMAN 403 - Akses Ditolak                -->
+<!-- Muncul kalau user tidak punya izin         -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>403 — Akses Ditolak</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.5.0/dist/basecoat.min.css">
+    <style>
+        /* Tampilkan konten tepat di tengah layar */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            /* Untuk ganti warna latar: ubah #f9fafb */
+            background-color: #f9fafb;
+            margin: 0;
+        }
+        .kotak {
+            text-align: center;
+            max-width: 450px;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="kotak">
+
+        <!-- Ikon besar di atas -->
+        <!-- Untuk ganti ikon: ubah emoji ⛔ -->
+        <p style="font-size: 5rem; margin: 0;">⛔</p>
+
+        <!-- Judul halaman -->
+        <!-- Untuk ganti warna judul: ubah color: #111827 -->
+        <h1 style="font-size: 2rem; font-weight: bold; color: #111827; margin-top: 1rem;">
+            Akses Ditolak
+        </h1>
+
+        <!-- Pesan penjelasan -->
+        <p style="color: gray; margin: 1rem 0; font-size: 0.95rem; line-height: 1.6;">
+            Maaf, anda tidak memiliki izin<br>
+            untuk membuka halaman ini.
+        </p>
+
+        <!-- Tombol kembali ke dashboard -->
+        <!-- Untuk ganti warna tombol: ubah background-color #1e40af -->
+        <a href="/dashboard" style="
+            display: inline-block;
+            background-color: #1e40af;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 0.5rem;
+        ">
+            Kembali ke Dashboard
+        </a>
+
+    </div>
+</body>
+</html>

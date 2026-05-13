@@ -1,0 +1,297 @@
+<!-- HALAMAN DASHBOARD                          -->
+<!-- Tampil setelah user berhasil login         -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — SIPENGABDIAN</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.5.0/dist/basecoat.min.css">
+    <style>
+
+        /* Hilangkan jarak default */
+        body { margin: 0; padding: 0; }
+
+        /* Tata letak: sidebar kiri + konten kanan */
+        .tampilan-utama {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR KIRI ── */
+        .sidebar {
+            width: 250px;
+            /* Untuk ganti warna sidebar: ubah #1e293b */
+            background-color: #1e293b;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Nama aplikasi di atas sidebar */
+        .sidebar-judul {
+            font-weight: bold;
+            font-size: 1.1rem;
+            /* Untuk ganti warna teks judul: ubah color white */
+            color: white;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        /* Setiap tombol menu di sidebar */
+        .menu-item {
+            display: block;
+            padding: 0.6rem 0.75rem;
+            border-radius: 6px;
+            text-decoration: none;
+            /* Untuk ganti warna teks menu: ubah color #94a3b8 */
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Warna menu saat mouse hover */
+        /* Untuk ganti warna hover: ubah background-color #334155 */
+        .menu-item:hover {
+            background-color: #334155;
+            color: white;
+        }
+
+        /* Warna menu yang sedang aktif/dibuka */
+        /* Untuk ganti warna aktif: ubah background-color #3b82f6 */
+        .menu-item.aktif {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Bagian paling bawah sidebar: info user + logout */
+        .sidebar-bawah {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid #334155;
+        }
+
+        /* ── KONTEN KANAN ── */
+        .konten {
+            flex: 1;
+            padding: 2rem;
+            /* Untuk ganti warna latar konten: ubah #f8fafc */
+            background-color: #f8fafc;
+        }
+
+        /* Grid untuk kartu statistik */
+        /* Otomatis menyesuaikan jumlah kolom */
+        .grid-kartu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+    </style>
+</head>
+<body>
+<div class="tampilan-utama">
+
+    <!-- SIDEBAR KIRI                  -->
+
+    <aside class="sidebar">
+
+        <!-- Nama aplikasi -->
+        <div class="sidebar-judul">🎓 SIPENGABDIAN</div>
+
+        <!-- Menu navigasi -->
+        <a href="/dashboard"  class="menu-item aktif">🏠 Dashboard</a>
+        <a href="/pengabdian" class="menu-item">📋 Data Pengabdian</a>
+        <a href="/anggota"    class="menu-item">👥 Anggota</a>
+        <a href="/undangan"   class="menu-item">📨 Undangan</a>
+
+        <!-- Info user yang sedang login + tombol logout -->
+        <div class="sidebar-bawah">
+
+            <div style="padding: 0.5rem; margin-bottom: 0.75rem;">
+
+                <!-- Nama user -->
+                <p style="color: white; font-weight: 600; font-size: 0.875rem; margin: 0 0 0.2rem 0;">
+                    <%= user.name %>
+                </p>
+
+                <!-- Email user -->
+                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0 0 0.4rem 0;">
+                    <%= user.email %>
+                </p>
+
+                <!-- Badge role user (contoh: dosen, admin) -->
+                <% if (user.roles && user.roles.length > 0) { %>
+                    <% user.roles.forEach(function(role) { %>
+                        <span style="
+                            background-color: #3b82f6;
+                            color: white;
+                            font-size: 0.65rem;
+                            padding: 0.2rem 0.5rem;
+                            border-radius: 99px;
+                            margin-right: 0.25rem;
+                        ">
+                            <%= role %>
+                        </span>
+                    <% }); %>
+                <% } %>
+
+            </div>
+
+            <!-- Tombol Keluar -->
+            <form method="POST" action="/logout">
+                <button type="submit" style="
+                    width: 100%;
+                    background-color: transparent;
+                    border: 1px solid #475569;
+                    color: #94a3b8;
+                    padding: 0.5rem;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 0.875rem;
+                ">
+                    🚪 Keluar
+                </button>
+            </form>
+
+        </div>
+    </aside>
+
+    <!-- KONTEN KANAN                  -->
+  
+    <main class="konten">
+
+        <!-- Judul halaman -->
+        <div style="margin-bottom: 2rem;">
+            <h1 style="font-size: 1.5rem; font-weight: bold; color: #0f172a; margin: 0 0 0.25rem 0;">
+                Dashboard
+            </h1>
+            <p style="color: gray; font-size: 0.875rem; margin: 0;">
+                Selamat datang kembali, <strong><%= user.name %></strong> 👋
+            </p>
+        </div>
+
+        <!-- Kartu statistik -->
+        <!-- Angka masih — karena data nyata diisi minggu depan -->
+        <div class="grid-kartu">
+
+            <!-- Kartu 1: Data Pengabdian -->
+            <div style="
+                background: white;
+                border-radius: 10px;
+                padding: 1.5rem;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                border-left: 4px solid #3b82f6;
+            ">
+                <p style="color: gray; font-size: 0.8rem; margin: 0 0 0.5rem 0;">
+                    📋 DATA PENGABDIAN
+                </p>
+                <!-- Untuk ganti angka: ubah tanda — -->
+                <p style="font-size: 2rem; font-weight: bold; color: #0f172a; margin: 0 0 0.25rem 0;">—</p>
+                <p style="color: #3b82f6; font-size: 0.75rem; margin: 0;">Modul 1 — Athaya</p>
+            </div>
+
+            <!-- Kartu 2: Anggota Pengabdian -->
+            <div style="
+                background: white;
+                border-radius: 10px;
+                padding: 1.5rem;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                border-left: 4px solid #10b981;
+            ">
+                <p style="color: gray; font-size: 0.8rem; margin: 0 0 0.5rem 0;">
+                    👥 ANGGOTA PENGABDIAN
+                </p>
+                <p style="font-size: 2rem; font-weight: bold; color: #0f172a; margin: 0 0 0.25rem 0;">—</p>
+                <p style="color: #10b981; font-size: 0.75rem; margin: 0;">Modul 2 — Sheva</p>
+            </div>
+
+            <!-- Kartu 3: Undangan -->
+            <div style="
+                background: white;
+                border-radius: 10px;
+                padding: 1.5rem;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                border-left: 4px solid #f59e0b;
+            ">
+                <p style="color: gray; font-size: 0.8rem; margin: 0 0 0.5rem 0;">
+                    📨 UNDANGAN MASUK
+                </p>
+                <p style="font-size: 2rem; font-weight: bold; color: #0f172a; margin: 0 0 0.25rem 0;">—</p>
+                <p style="color: #f59e0b; font-size: 0.75rem; margin: 0;">Modul 3 — Bersama</p>
+            </div>
+
+        </div>
+
+        <!-- Kartu info akun: berguna saat demo ke dosen -->
+        <div style="
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        ">
+            <h3 style="font-size: 1rem; font-weight: bold; margin: 0 0 0.25rem 0;">
+                Informasi Akun
+            </h3>
+            <p style="color: gray; font-size: 0.8rem; margin: 0 0 1rem 0;">
+                Detail session dan izin akses (ACL)
+            </p>
+
+            <p style="font-size: 0.875rem; margin: 0 0 0.5rem 0;">
+                <strong>Izin yang dimiliki:</strong>
+            </p>
+
+            <!-- Tampilkan semua izin user sebagai badge -->
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <% if (user.permissions && user.permissions.length > 0) { %>
+                    <% user.permissions.forEach(function(izin) { %>
+                        <span style="
+                            background-color: #eff6ff;
+                            color: #1d4ed8;
+                            font-size: 0.75rem;
+                            padding: 0.25rem 0.6rem;
+                            border-radius: 99px;
+                            border: 1px solid #bfdbfe;
+                        ">
+                            <%= izin %>
+                        </span>
+                    <% }); %>
+                <% } else { %>
+                    <p style="color: gray; font-size: 0.875rem;">Tidak ada izin</p>
+                <% } %>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Notifikasi Pop-up Berhasil Login -->
+<% if (typeof success !== 'undefined' && success && success.length) { %>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: 'Berhasil Autentikasi!',
+                text: 'Selamat datang di SIPENGABDIAN Universitas Andalas.',
+                icon: 'success',
+                confirmButtonColor: '#10b981',
+                confirmButtonText: 'Mulai Navigasi',
+                timer: 3500,
+                timerProgressBar: true,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        });
+    </script>
+<% } %>
+
+</body>
+</html>
