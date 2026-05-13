@@ -1,0 +1,34 @@
+<!-- FLASH MESSAGE - Notifikasi sukses/error    -->
+<!-- Muncul otomatis setelah aksi tertentu      -->
+
+<% if (typeof flash !== 'undefined' && flash) { %>
+
+    <!-- Notifikasi SUKSES — kotak hijau -->
+    <!-- Untuk ganti warna: ubah background-color #dcfce7 -->
+    <% if (flash.success && flash.success.length > 0) { %>
+        <div style="
+            background-color: #dcfce7;
+            border-left: 4px solid #16a34a;
+            color: #166534;
+            padding: 1rem 2rem;
+            font-size: 0.9rem;
+        ">
+             <%= flash.success[0] %>
+        </div>
+    <% } %>
+
+    <!-- Notifikasi ERROR — kotak merah -->
+    <!-- Untuk ganti warna: ubah background-color #fee2e2 -->
+    <% if (flash.error && flash.error.length > 0) { %>
+        <div style="
+            background-color: #fee2e2;
+            border-left: 4px solid #dc2626;
+            color: #991b1b;
+            padding: 1rem 2rem;
+            font-size: 0.9rem;
+        ">
+             <%= flash.error[0] %>
+        </div>
+    <% } %>
+
+<% } %>
