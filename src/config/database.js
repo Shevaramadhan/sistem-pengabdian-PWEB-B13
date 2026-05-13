@@ -15,8 +15,7 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelayMs: 0,
+  // keep-alive options removed to avoid mysql2 warning about invalid Connection options
 });
 
 /**
