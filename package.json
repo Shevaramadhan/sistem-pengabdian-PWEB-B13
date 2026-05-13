@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "seed": "node database/seedAdmin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,6 +14,7 @@
   "description": "Sistem Informasi Pengabdian kepada Masyarakat - PWEB B13",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "connect-flash": "^0.1.1",
     "dotenv": "^17.4.2",
     "ejs": "^5.0.2",
