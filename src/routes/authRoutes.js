@@ -5,10 +5,10 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const guestMiddleware = require('../middleware/guestMiddleware');
 
-// GET /login
+// Route buat nampilin form login
 router.get('/login', guestMiddleware, authController.showLogin);
 
-// POST /login
+// Route buat memproses kiriman form login
 router.post(
   '/login',
   guestMiddleware,
@@ -19,7 +19,7 @@ router.post(
   authController.login
 );
 
-// POST /logout
+// Route buat keluar akun (logout)
 router.post('/logout', authController.logout);
 
 module.exports = router;

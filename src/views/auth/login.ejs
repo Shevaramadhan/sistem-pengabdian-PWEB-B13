@@ -1,23 +1,542 @@
-<%- include('../layouts/main') -%>
+<!-- Halaman Autentikasi SIPENGABDIAN -->
+<!-- Portal Pengabdian kepada Masyarakat Universitas Andalas -->
 
-<div class="container" style="max-width:480px;margin:4rem auto;">
-  <h2 class="mb-3">Login</h2>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Pengabdian Masyarakat — Universitas Andalas</title>
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Basecoat UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.5.0/dist/basecoat.min.css">
+    <style>
+        :root {
+            --unand-green: #047857;
+            --unand-emerald: #059669;
+            --unand-gold: #f59e0b;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+        }
 
-  <%- include('../partials/flash') %>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  <form action="/login" method="POST">
-    <div class="form-group mb-2">
-      <label for="email">Email</label>
-      <input type="email" name="email" id="email" class="form-control" required value="">
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* Layout Grid Split Screen */
+        .split-layout {
+            display: flex;
+            width: 100vw;
+            min-height: 100vh;
+        }
+
+        /* --- SISI KIRI: Hero Showcase Area --- */
+        .hero-section {
+            flex: 1.2;
+            position: relative;
+            background: linear-gradient(135deg, rgba(4, 120, 87, 0.85), rgba(15, 23, 42, 0.92)), url('/img/bg-unand.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4rem;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Dekorasi Lingkaran Pendar */
+        .hero-glow {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-header {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #ffffff, #f1f5f9);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 540px;
+            margin-bottom: auto;
+            margin-top: auto;
+        }
+
+        .tagline-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a7f3d0;
+        }
+
+        .hero-content h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            color: #ffffff;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+            font-weight: 400;
+        }
+
+        .hero-footer {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding-top: 2rem;
+        }
+
+        .stat-item h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #a7f3d0;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-item p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* --- SISI KANAN: Form Login Area --- */
+        .auth-section {
+            flex: 1;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 420px;
+            animation: fadeInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .form-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Styling Input Premium */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            outline: none;
+            background: #f8fafc;
+        }
+
+        .form-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-input:hover {
+            border-color: #cbd5e1;
+            background: #ffffff;
+        }
+
+        .form-input:focus {
+            border-color: var(--unand-emerald);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(5, 96, 68, 0.1);
+        }
+
+        .form-input:focus ~ .input-icon {
+            color: var(--unand-emerald);
+        }
+
+        /* Toggle Password Button */
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+            outline: none;
+        }
+
+        .toggle-password:hover {
+            color: var(--unand-emerald);
+        }
+
+        .form-input-password {
+            padding-right: 2.8rem;
+        }
+
+        /* Button Premium */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--unand-emerald), var(--unand-green));
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(4, 120, 87, 0.25);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, var(--unand-green), #065f46);
+            box-shadow: 0 15px 30px rgba(4, 120, 87, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(4, 120, 87, 0.2);
+        }
+
+        /* Notifikasi Flash */
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        /* Info Footer Form */
+        .tester-note {
+            margin-top: 2.5rem;
+            background-color: #f1f5f9;
+            border: 1px dashed #cbd5e1;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .tester-note strong {
+            color: var(--unand-green);
+        }
+
+        /* Responsiveness untuk layar kecil/tablet */
+        @media (max-width: 1024px) {
+            .split-layout {
+                flex-direction: column;
+            }
+
+            .hero-section {
+                padding: 3rem 2rem;
+                min-height: 480px;
+            }
+
+            .fti-floating-showcase {
+                display: none; /* Sembunyikan floating showcase di mobile agar bersih */
+            }
+
+            .auth-section {
+                padding: 3rem 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        /* Animasi */
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="split-layout">
+        
+        <!-- SISI KIRI: Visual Showcase Universitas Andalas -->
+        <section class="hero-section">
+            <div class="hero-glow"></div>
+            
+            <div class="hero-header">
+                <div class="logo-brand">
+                    <div class="logo-icon" style="padding: 4px;">
+                        <img src="/img/logo-unand.png" alt="Logo Universitas Andalas" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <div class="logo-text" style="font-size: 1.35rem;">Universitas Andalas</div>
+                </div>
+            </div>
+
+            <div class="hero-content">
+                <span class="tagline-badge">Sistem Terintegrasi</span>
+                <h1>Pengabdian Masyarakat yang Berdampak & Berkelanjutan</h1>
+                <p>Platform tata kelola data pengabdian dosen Universitas Andalas. Menjembatani inovasi akademik dengan kebutuhan riil masyarakat secara transparan dan akuntabel.</p>
+            </div>
+
+            <div class="hero-footer" style="border-top: none; padding-top: 0; opacity: 0.8;">
+                <p style="font-size: 0.85rem; color: #e2e8f0;">&copy; Universitas Andalas. Hak Cipta Dilindungi Undang-Undang.</p>
+            </div>
+        </section>
+
+        <!-- SISI KANAN: Autentikasi User -->
+        <section class="auth-section">
+            <div class="form-container">
+                
+                <div class="form-header">
+                    <h2>Selamat Datang</h2>
+                    <p>Silakan masuk menggunakan kredensial akun dosen</p>
+                </div>
+
+                <!-- Flash Message Output -->
+                <% if (typeof success !== 'undefined' && success && success.length) { %>
+                    <div class="alert alert-success">
+                        <span>✅</span>
+                        <div><%= success[0] %></div>
+                    </div>
+                <% } %>
+
+                <% if (typeof error !== 'undefined' && error && error.length) { %>
+                    <div class="alert alert-error">
+                        <span>⚠️</span>
+                        <div><%= error[0] %></div>
+                    </div>
+                <% } %>
+
+                <% if (typeof validation !== 'undefined' && validation && validation.length) { %>
+                    <div class="alert alert-warning">
+                        <span>💡</span>
+                        <ul style="margin: 0; padding-left: 1.2rem;">
+                            <% validation.forEach(function(v) { %>
+                                <li><%= v.msg %></li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                <% } %>
+
+                <!-- Form Login -->
+                <form action="/login" method="POST">
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Alamat Email</label>
+                        <div class="input-group">
+                            <input type="email" name="email" id="email" class="form-input" 
+                                   placeholder="dosen@unand.ac.id" required autocomplete="email">
+                            <span class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Kata Sandi</label>
+                        <div class="input-group">
+                            <input type="password" name="password" id="password" class="form-input form-input-password" 
+                                   placeholder="••••••••" required>
+                            <span class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                            <button type="button" class="toggle-password" id="togglePasswordBtn" title="Tampilkan sandi">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eyeSlashIcon"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eyeOpenIcon" style="display: none;"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <span>Masuk ke Dashboard</span>
+                        <span>➔</span>
+                    </button>
+
+                </form>
+
+              
+            </div>
+        </section>
+
     </div>
 
-    <div class="form-group mb-3">
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" class="form-control" required>
-    </div>
+    <!-- Script Toggle Password -->
+    <script>
+        const toggleBtn = document.getElementById('togglePasswordBtn');
+        const passwordInput = document.getElementById('password');
+        const eyeOpenIcon = document.getElementById('eyeOpenIcon');
+        const eyeSlashIcon = document.getElementById('eyeSlashIcon');
 
-    <button type="submit" class="btn btn-primary">Masuk</button>
-  </form>
-
-  <p class="mt-3 text-muted">Tes login: admin@unand.ac.id / admin123</p>
-</div>
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', function () {
+                const isPassword = passwordInput.getAttribute('type') === 'password';
+                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                
+                if (eyeOpenIcon && eyeSlashIcon) {
+                    eyeOpenIcon.style.display = isPassword ? 'block' : 'none';
+                    eyeSlashIcon.style.display = isPassword ? 'none' : 'block';
+                }
+                
+                this.setAttribute('title', isPassword ? 'Sembunyikan sandi' : 'Tampilkan sandi');
+            });
+        }
+    </script>
+</body>
+</html>

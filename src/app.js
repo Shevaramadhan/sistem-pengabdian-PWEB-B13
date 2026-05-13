@@ -21,7 +21,19 @@ app.set('views', path.join(__dirname, 'views'));
 // ============================================================
 // MIDDLEWARE SECURITY & LOGGING
 // ============================================================
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:"],
+      },
+    },
+  })
+);
 app.use(morgan('dev'));
 
 // ============================================================
@@ -89,14 +101,15 @@ app.use((req, res, next) => {
 app.use(routes);
 
 // ============================================================
-// SIMPLE ERROR HANDLING (sementara sampai Athaya buat errorMiddleware)
+// 404 NOT FOUND HANDLER
 // ============================================================
-// 404 Not Found
 app.use((req, res) => {
   res.status(404).send('Halaman tidak ditemukan (404)');
 });
 
-// Global error handler
+// ============================================================
+// GLOBAL ERROR HANDLER (sementara, nanti pakai errorMiddleware dari Athaya)
+// ============================================================
 app.use((err, req, res, next) => {
   console.error('❌ Error:', err.message);
   res.status(err.statusCode || 500).send(err.message || 'Terjadi kesalahan pada server');

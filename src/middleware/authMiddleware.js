@@ -1,4 +1,4 @@
-// middleware untuk memastikan user sudah login
+// Middleware buat mastiin user udah login sebelum ngakses route tertutup
 module.exports = (req, res, next) => {
   if (req.session && req.session.user) return next();
 

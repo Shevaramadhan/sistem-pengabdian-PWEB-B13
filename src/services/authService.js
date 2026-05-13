@@ -1,11 +1,7 @@
 const pool = require('../config/database');
 const bcrypt = require('bcryptjs');
 
-/**
- * Coba login pake email + password
- * Kalau berhasil: balikkan objek user (tanpa password)
- * Kalau gagal: balikkan null
- */
+// Coba login pake email sama password
 async function attemptLogin(email, password) {
   if (!email || !password) return null;
 
@@ -20,14 +16,12 @@ async function attemptLogin(email, password) {
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return null;
 
-  // hapus password biar gak kebocor kalau balikkan user
+  // buang field password biar aman pas disimpen di session
   delete user.password;
   return user;
 }
 
-/**
- * Ambil daftar role user (balik array nama role)
- */
+// Ambil list role yang dipunya user
 async function getUserRoles(userId) {
   if (!userId) return [];
 
@@ -41,14 +35,11 @@ async function getUserRoles(userId) {
   return rows.map((r) => r.name);
 }
 
-/**
- * Ambil permission user.
- * Gabung permission yang langsung diberi dan yang didapat lewat role.
- */
+// Ambil semua permission user, gabungan dari direct permission sama dari role
 async function getUserPermissions(userId) {
   if (!userId) return [];
 
-  // permission yang langsung dipetakan ke user
+  // permission yang nempel langsung di user
   const [direct] = await pool.query(
     `SELECT p.name FROM permissions p
      JOIN model_has_permissions mp ON p.id = mp.permission_id
@@ -56,7 +47,7 @@ async function getUserPermissions(userId) {
     [userId]
   );
 
-  // permission yang didapat lewat role
+  // permission yang dapet dari role
   const [viaRoles] = await pool.query(
     `SELECT DISTINCT p.name FROM permissions p
      JOIN role_has_permissions rp ON p.id = rp.permission_id
@@ -69,7 +60,6 @@ async function getUserPermissions(userId) {
   direct.forEach((r) => names.add(r.name));
   viaRoles.forEach((r) => names.add(r.name));
 
-  // balik array unik
   return Array.from(names);
 }
 

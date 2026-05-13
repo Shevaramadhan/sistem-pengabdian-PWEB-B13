@@ -1,12 +1,12 @@
 const { validationResult } = require('express-validator');
 const authService = require('../services/authService');
 
-// Tampil halaman login
+// Nampilin halaman form login
 exports.showLogin = (req, res) => {
 	res.render('auth/login', { title: 'Login' });
 };
 
-// Proses login
+// Proses verifikasi login pas tombol submit ditekan
 exports.login = async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -23,11 +23,11 @@ exports.login = async (req, res) => {
 			return res.redirect('/login');
 		}
 
-		// ambil roles & permissions
+		// ambil data roles sama permissions buat keperluan ACL
 		const roles = await authService.getUserRoles(user.id);
 		const permissions = await authService.getUserPermissions(user.id);
 
-		// simpan ke session
+		// simpen data user ke session aktif saat ini
 		req.session.user = {
 			id: user.id,
 			name: user.name,
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
 	}
 };
 
-// Proses logout
+// Proses keluar akun (destroy session)
 exports.logout = (req, res) => {
 	req.session.destroy((err) => {
 		if (err) console.error('Error destroy session:', err);

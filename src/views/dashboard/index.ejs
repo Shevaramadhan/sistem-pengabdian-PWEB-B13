@@ -268,5 +268,30 @@
 
     </main>
 </div>
+
+<!-- Notifikasi Pop-up Berhasil Login -->
+<% if (typeof success !== 'undefined' && success && success.length) { %>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: 'Berhasil Autentikasi!',
+                text: 'Selamat datang di SIPENGABDIAN Universitas Andalas.',
+                icon: 'success',
+                confirmButtonColor: '#10b981',
+                confirmButtonText: 'Mulai Navigasi',
+                timer: 3500,
+                timerProgressBar: true,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        });
+    </script>
+<% } %>
+
 </body>
 </html>
