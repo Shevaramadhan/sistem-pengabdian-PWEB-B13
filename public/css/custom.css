@@ -1,0 +1,24 @@
+
+/* CSS TAMBAHAN - SIPENGABDIAN                  */
+/* Semua elemen pakai ukuran yang konsisten */
+* {
+    box-sizing: border-box;
+}
+
+/* Hilangkan jarak default di pinggir halaman */
+body {
+    margin: 0;
+    padding: 0;
+    /* Untuk ganti font seluruh aplikasi: ubah di bawah ini */
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Semua link tidak punya garis bawah */
+a {
+    text-decoration: none;
+}
+
+/* Tombol tidak punya outline saat diklik */
+button:focus {
+    outline: none;
+}
