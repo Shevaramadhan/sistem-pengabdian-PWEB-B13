@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %> - Interactive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- BAGIAN CSS (PENGATURAN TAMPILAN) --- */
+        :root {
+            --putih-bg: #f8fafc;
+            --hijau-gradasi: linear-gradient(180deg, #10b981 0%, #064e3b 100%);
+            --hijau-tua: #04100d;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            background-color: var(--putih-bg);
+            font-family: 'Inter', sans-serif;
+            margin: 0; display: flex; min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Styling Sidebar Hijau di Samping */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--hijau-gradasi);
+            height: 100vh; position: fixed;
+            left: 0; top: 0; display: flex; flex-direction: column;
+            z-index: 1000; transition: all 0.4s ease;
+        }
+
+        .sidebar.hide { left: calc(var(--sidebar-width) * -1); }
+
+        .logo-area { padding: 30px 15px; text-align: center; color: white; }
+        .logo-area img { width: 60px; margin-bottom: 10px; }
+        .logo-area div { font-weight: 700; font-size: 12px; letter-spacing: 1px; line-height: 1.4; }
+
+        .nav-links { flex-grow: 1; padding: 10px 15px; overflow-y: auto; }
+
+        /* Menu Link di Sidebar */
+        .menu-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 18px; margin-top: 5px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none; border-radius: 10px;
+            transition: 0.3s; font-size: 13px; font-weight: 500; cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: white; color: var(--hijau-tua);
+            transform: scale(1.02); font-weight: 700;
+        }
+
+        /* Bagian Sub-Menu yang bisa kebuka (dropdown) */
+        .sub-menu { 
+            max-height: 0; overflow: hidden; 
+            transition: max-height 0.3s ease-out; padding-left: 15px;
+        }
+        .sub-menu.open { max-height: 300px; margin-bottom: 10px; }
+
+        .sub-item {
+            display: block; padding: 8px 18px; color: rgba(255, 255, 255, 0.7);
+            text-decoration: none; font-size: 12px; border-radius: 8px; transition: 0.3s;
+        }
+        .sub-item:hover { color: white; background: rgba(255,255,255,0.1); }
+
+        .sidebar-footer { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+        /* Area Konten Utama */
+        .main-content {
+            margin-left: var(--sidebar-width); flex-grow: 1; 
+            transition: all 0.4s ease; width: 100%;
+        }
+        .main-content.full { margin-left: 0; }
+
+        /* Top Navbar (Header atas) */
+        .top-navbar {
+            background: var(--hijau-gradasi);
+            padding: 15px 40px; display: flex; 
+            justify-content: space-between; align-items: center; color: white;
+        }
+
+        .header-right { display: flex; align-items: center; gap: 25px; }
+
+        /* Lonceng Notifikasi */
+        .notif-wrapper { position: relative; cursor: pointer; display: flex; align-items: center; }
+        .bell-icon { width: 22px; height: 22px; fill: white; }
+        .notif-badge {
+            position: absolute; top: -5px; right: -8px;
+            background: #ef4444; color: white; font-size: 9px;
+            font-weight: 800; padding: 2px 5px; border-radius: 10px;
+            border: 2px solid #10b981;
+        }
+
+        .profile-btn { 
+            display: flex; align-items: center; gap: 15px; 
+            cursor: pointer; padding: 5px 10px; border-radius: 10px; transition: 0.3s;
+        }
+        .profile-btn:hover { background: rgba(255,255,255,0.1); }
+
+        .avatar-box {
+            width: 35px; height: 35px; background: white; border-radius: 8px;
+            color: var(--hijau-tua); display: flex; align-items: center; 
+            justify-content: center; font-weight: 800;
+        }
+
+        .content-body { padding: 30px 40px; }
+        .top-row { display: flex; gap: 20px; }
+
+        /* Card (Kotak-kotak info) */
+        .card-slim {
+            background: var(--hijau-gradasi);
+            padding: 20px 30px; border-radius: 20px;
+            color: white; box-shadow: 0 10px 25px rgba(6, 78, 59, 0.1);
+        }
+        .welcome-card { flex: 2.2; }
+        .total-card { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+
+        .total-main { padding: 15px; text-align: center; }
+        .number { font-size: 2.5rem; font-weight: 800; margin: 0; }
+        
+        .more-info-btn {
+            background: rgba(0, 0, 0, 0.1); padding: 10px; text-align: center; 
+            font-size: 9px; font-weight: 700; color: white; border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.15); cursor: pointer; width: 100%;
+        }
+        .more-info-btn:hover { background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar" id="mySidebar">
+        <div class="logo-area">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Logo_Unand.png" alt="Logo Unand">
+            <div>UNIVERSITAS ANDALAS</div>
+        </div>
+
+        <div class="nav-links">
+            <a href="#" class="menu-item active">Dashboard</a>
+
+            <div class="menu-item" onclick="toggleSubMenu('sub-pengabdian')">
+                <span>Pengabdian</span><span>▼</span>
+            </div>
+            <div class="sub-menu" id="sub-pengabdian">
+                <a href="#" class="sub-item">• Usulan Baru</a>
+                <a href="#" class="sub-item">• Riwayat Usulan</a>
+                <a href="#" class="sub-item">• Laporan Kemajuan</a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubMenu('sub-monitoring')">
+                <span>Monitoring</span><span>▼</span>
+            </div>
+            <div class="sub-menu" id="sub-monitoring">
+                <a href="#" class="sub-item">• Status Review</a>
+                <a href="#" class="sub-item">• Plotting Reviewer</a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubMenu('sub-master')">
+                <span>Master Data</span><span>▼</span>
+            </div>
+            <div class="sub-menu" id="sub-master">
+                <a href="#" class="sub-item" style="color: #fbbf24;">• Verifikasi Anggota</a>
+                <a href="#" class="sub-item">• Pengaturan Admin</a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="menu-item" onclick="alert('Buka Pengaturan')">Pengaturan</div>
+            <div class="menu-item" style="color: #fda4af;" onclick="confirm('Yakin ingin keluar?')">Keluar</div>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <%- body %> </div>
+
+    <script>
+        function handleNotif() {
+            alert("Membuka daftar notifikasi baru...");
+        }
+
+        // Fungsi Buka Tutup Sidebar
+        function toggleSidebar() {
+            document.getElementById('mySidebar').classList.toggle('hide');
+            document.getElementById('mainContent').classList.toggle('full');
+        }
+
+        // Fungsi Buka Tutup Sub-Menu (Dropdown)
+        function toggleSubMenu(id) {
+            const menu = document.getElementById(id);
+            menu.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
